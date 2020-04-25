@@ -21,14 +21,21 @@ class UserRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+     public function rules()
     {
+        $rules = [
+          'email'                 => 'required|email',
+          'password'              => 'required|min:6',
+          'password_confirmation' => 'filled', # 追加
+        ];
 
-      $rules = [
-        'email'     => 'required|email',
-        'password'  => 'required|min:6',
-      ];
+        # 追加
+        if ($this->password_confirmation) {
+          $rules['name']      = 'required|max:20';
+          $rules['email']     = 'required|email|unique:users';
+          $rules['password']  = 'required|min:6|confirmed';
+        }
+
         return $rules;
-          
     }
 }
